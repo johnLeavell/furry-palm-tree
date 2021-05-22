@@ -1,42 +1,65 @@
-import React, { useState } from 'react'
+import React from 'react';
 
-const SEARCHSTORIES = `http://hn.algolia.com/api/v1/search?query=`
-
-const Search = () => {
-    const [input, setInput] = useState('');
-
-    const handleChange = e => {
-        setInput(e.target.value)
-    };
-
-    const resetInput = () => {
-        setInput("")
+class Search extends React.Component {
+    constructor(){
+        super()
+        this.state = {
+            input: '',
+            articles: []
+        }
     }
-    const handleSubmit = e => {
-        e.preventDefault();
-        fetch(SEARCHSTORIES+`${input}`)
-        .then(resp => resp.json())
-        .then(articleData => {
-            // setArticles
-            console.log(articleData.hits)
-        })
-        resetInput()
+
+    handleInput = e => {
+        this.setState({
+            input: e.target.value})
     };
-    
-    return (
-        <div className='container'>
-            <form onSubmit={handleSubmit}>
-            <label>Search for Articles By Title</label>
-            <br />
-                <input 
-                type='text'
-                value={input}
-                name='articleInput'
-                onChange={handleChange}
-                />
-            </form>
-        </div>
-    )
+
+    handleSearch = () => {
+        this.handleSubmit(this.state.input);
+    }
+
+    resetInput = () => {
+        this.setState({
+            input: '',
+            articles: [...this.state.articles]
+        })
+    }
+
+    handleSubmit = e => {
+        e.preventDefault();
+
+        let searchUrl = `http://hn.algolia.com/api/v1/search?query=`;
+        let input = this.state.input;
+
+        fetch(searchUrl+input)
+        .then(resp => resp.json())
+        .then(data => {
+            this.setState({
+                articles: data.hits
+            })
+        })
+        this.resetInput()
+    };
+
+    render() {
+        console.log(this.state);
+        return (
+            <div className='container'>
+                <form onSubmit={this.handleSubmit}>
+                    <label>Search for Articles By Title</label>
+                    <br />
+                    <input 
+                    type='text'
+                    value={this.state.input}
+                    placeholder='Search'
+                    name='articleInput'
+                    onChange={this.handleInput}
+                    />
+                    <button onClick={this.handleSubmit}>Search</button>
+                </form>
+            </div>
+        )
+    }
 }
 
 export default Search;
