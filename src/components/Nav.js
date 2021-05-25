@@ -2,13 +2,9 @@ import React from 'react'
 
 const Nav = () => {
     return (
-        <div className="container">
             <div className="navigation">
-                <a href="#" className={"bold title"}>
-                    Hacker News
-                </a>
+              <h2>NavBar</h2>
             </div>
-        </div>
     );
 }
 

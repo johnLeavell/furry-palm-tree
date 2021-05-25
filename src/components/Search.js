@@ -1,11 +1,15 @@
 import React from 'react';
+import SearchResults from './SearchResults';
+import HomePage from './HomePage';
+import { withRouter } from 'react-router-dom';
 
 class Search extends React.Component {
     constructor(){
         super()
         this.state = {
             input: '',
-            articles: []
+            articles: [],
+            // redirect: null,
         }
     }
 
@@ -21,28 +25,36 @@ class Search extends React.Component {
     resetInput = () => {
         this.setState({
             input: '',
-            articles: [...this.state.articles]
+            // articles: [...this.state.articles]
         })
     }
 
     handleSubmit = e => {
         e.preventDefault();
 
-        let searchUrl = `http://hn.algolia.com/api/v1/search?query=`;
-        let input = this.state.input;
+        const searchUrl = `http://hn.algolia.com/api/v1/search?query=`;
+        const input = this.state.input;
+        const queryString = `${searchUrl+input}`;
 
         fetch(searchUrl+input)
         .then(resp => resp.json())
         .then(data => {
             this.setState({
-                articles: data.hits
+                articles: data.hits,
+                // redirect: '/searchresults'
             })
         })
         this.resetInput()
+        this.props.history.push(`/searchresults/${queryString}`)
     };
 
     render() {
         console.log(this.state);
+        const { articles, redirect } = this.state.articles;
+
+        // if(redirect) {
+        //     return <Redirect to={redirect} />
+        // }
         return (
             <div className='container'>
                 <form onSubmit={this.handleSubmit}>
@@ -56,10 +68,17 @@ class Search extends React.Component {
                     onChange={this.handleInput}
                     />
                     <button onClick={this.handleSubmit}>Search</button>
+                    {/* { articles ? <SearchResults /> : <HomePage /> } */}
                 </form>
+                
             </div>
         )
     }
 }
 
-export default Search;
+export default withRouter(Search);
+
+// {articles ? <Redirect to={{
+//     pathname: '/searchresults',
+//     state: {articles: this.state.results }
+// }} /> : <HomePage /> }

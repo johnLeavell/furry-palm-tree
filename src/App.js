@@ -2,32 +2,23 @@ import React from 'react'
 
 import { Route, BrowserRouter, Switch } from 'react-router-dom';
 
-import "./styles/Nav.css";
 
-import Nav from './components/Nav';
 import Search from './components/Search';
-import ArticlesPage from './components/ArticlesPage';
+import HomePage from './components/HomePage';
+import SearchResults from './components/SearchResults';
 
-
-class App extends React.Component {
-  constructor(){
-    super()
-  }
-
-  render() {
-    return (
-      <BrowserRouter>
-        <Nav/>
-          <div className='container'>
-            <h3>Top Stories:</h3>
-            <Search />
-          </div>
-          <div className='container'>
-            <ArticlesPage />
-          </div>
-      </BrowserRouter>
-    );
-  }
+const App = () => {
+  return (
+    <BrowserRouter>
+      <div className='container'>
+      <Search />
+          <Switch>
+          <Route path='/' component={HomePage} />
+          <Route path='/searchresults' component={SearchResults} />
+        </Switch>
+      </div>
+    </BrowserRouter>
+  );
 }
 
 export default App;
