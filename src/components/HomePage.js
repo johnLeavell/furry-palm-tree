@@ -1,11 +1,11 @@
 import React from 'react'
+import { connect } from 'react-redux';
 
 class HomePage extends React.Component {
     constructor(props){
         super(props)
         this.state = {
             articles: [],
-            isLoaded: false
         }
     }
 
@@ -20,13 +20,15 @@ class HomePage extends React.Component {
         .then(articles => {
             this.setState({
                 articles: articles.hits,
-                isLoaded: true
             })
         })
     }
 
     render() {
+        console.log('homepage component prop', this.props);
         const articles = this.state.articles;
+        console.log('state', this.state);
+      
 
         return (
              <div>
@@ -48,4 +50,10 @@ class HomePage extends React.Component {
     }
 }
 
-export default HomePage;
+const mapStateToProps = (state) => {
+    return {
+        articles: state.articles
+    }
+}
+
+export default connect(mapStateToProps, null)(HomePage);

@@ -1,5 +1,4 @@
 import React from 'react';
-import SearchResults from './SearchResults';
 import HomePage from './HomePage';
 import { withRouter } from 'react-router-dom';
 
